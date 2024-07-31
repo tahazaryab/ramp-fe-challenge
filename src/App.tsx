@@ -12,6 +12,7 @@ export function App() {
   const { data: employees, ...employeeUtils } = useEmployees()
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
+  const [approvedTransactions, setApprovedTransactions] = useState<Record<string, boolean>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [filteredByEmployee, setFilteredByEmployee] = useState(false)
 
@@ -43,6 +44,13 @@ export function App() {
     },
     [paginatedTransactionsUtils, transactionsByEmployeeUtils]
   )
+
+  const handleApprovalChange = (transactionId: string, approved: boolean) => {
+    setApprovedTransactions(prev => ({
+      ...prev,
+      [transactionId]: approved
+    }));
+  }
 
   useEffect(() => {
     if (employees === null && !employeeUtils.loading) {
@@ -79,7 +87,7 @@ export function App() {
         <div className="RampBreak--l" />
 
         <div className="RampGrid">
-          <Transactions transactions={transactions} />
+          <Transactions transactions={transactions} approvedTransactions={approvedTransactions} onApprovalChange={handleApprovalChange}/>
 
           {!filteredByEmployee && paginatedTransactions?.nextPage !== null && transactions !== null && (
             <button

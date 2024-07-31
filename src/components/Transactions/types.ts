@@ -6,7 +6,7 @@ export type SetTransactionApprovalFunction = (params: {
   newValue: boolean
 }) => Promise<void>
 
-type TransactionsProps = { transactions: Transaction[] | null }
+type TransactionsProps = { transactions: Transaction[] | null, approvedTransactions: Record<string, boolean>, onApprovalChange: (transactionId: string, approved: boolean) => void}
 
 type TransactionPaneProps = {
   transaction: Transaction
